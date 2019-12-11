@@ -11,11 +11,10 @@ from subprocess import run
 from csv import reader
 import matplotlib.pyplot as plt
 
-seed(0)
-N = 2
+N = 10
 NThread = 2
 Pop = { 'chrom' : [], 'fitness' : [], 'perc' : []}
-GeneLen = 3
+GeneLen = 10
 g = 200. # Sidelength of periodic structure in nanometers
 delR = g / (2 * GeneLen)
 template_fn = "template.m" 
