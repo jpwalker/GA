@@ -80,7 +80,7 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
         output_file = 'run_{0}.csv'.format(left + l)
         with open(matlab_file, 'w') as f:
             f.write(template.format(copper, output_file))
-        print(run(matlab_cmdline_run.format(matlab_file)))
+        print(run(matlab_cmdline_run.format(matlab_file), shell=True))
         data = {'lamb' : [], 'R' : [], 'T' : []}
         with open(output_file, 'r') as f:
             csvreader = reader(f)
