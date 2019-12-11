@@ -7,6 +7,9 @@ Created on Dec 8, 2019
 from random import seed, random
 from multiprocessing import Process
 from math import floor
+from subprocess import run
+from csv import reader
+import matplotlib.pyplot as plt
 
 seed(0)
 N = 2
@@ -18,6 +21,7 @@ delR = g / (2 * GeneLen)
 template_fn = "template.m" 
 with open(template_fn, 'r') as f:
     template = f.read()
+matlab_cmdline_run = 'matlab -nodisplay -nosplash -nodesktop -r "run(\'{0}\');exit;"'
 
 def thread_func(i):
     fltN = float(N)
@@ -72,10 +76,21 @@ model.component('comp1').geom('geom1').feature('dif{0}').selection('input2').set
 model.component('comp1').geom('geom1').feature('dif{0}').set('contributeto', 'csel3');
 model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_num - 2, cyl_num - 1)
                 dif_num += 1
-        print(j)
-        with open('template_{0}.m'.format(i  * floor(fltN / NThread) + l), 'w') as f:
-            f.write(template.format(copper))
-
+        matlab_file = 'run_{0}.m'.format(left + l)
+        output_file = 'run_{0}.csv'.format(left + l)
+        with open(matlab_file, 'w') as f:
+            f.write(template.format(copper, output_file))
+        print(run(matlab_cmdline_run.format(matlab_file)))
+        data = {'lamb' : [], 'R' : [], 'T' : []}
+        with open(output_file, 'r') as f:
+            csvreader = reader(f)
+            for row in csvreader:
+                data['lamb'].append(row[0])
+                data['R'].append(row[1])
+                data['T'].append(row[2])
+        plt.plot([data['lamb'], data['lamb']], [data['T'], data['R']])
+        plt.show()
+        
 def compute_fitness():
     threads = []
     for i in range(NThread):
@@ -83,6 +98,7 @@ def compute_fitness():
         threads[-1].start()
     for i in threads:
         i.join()
+        
 
 def compute_crossover():
     pass

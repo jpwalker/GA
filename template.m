@@ -1,4 +1,4 @@
-function [R, T] = model
+function model
 %
 % template.m
 %
@@ -247,6 +247,8 @@ model.study('std1').create('wave', 'Wavelength');
 model.study('std1').feature('wave').set('plist', 'range(lambda_min,(lambda_max-(lambda_min))/(N_f-1),lambda_max)');
 
 model.study('std1').run;
+lambda0 = mphglobal(model, 'lambda0');
 R = mphglobal(model, 'abs(emw.S11)^2');
 T = mphglobal(model, 'abs(emw.S21)^2');
+writematrix([lambda0, R, T]', '{1}')
 end
