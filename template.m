@@ -1,4 +1,4 @@
-function out = model
+function [R, T] = model
 %
 % template.m
 %
@@ -246,4 +246,7 @@ model.component('comp1').coordSystem('pml1').selection.named('geom1_csel1_dom');
 model.study('std1').create('wave', 'Wavelength');
 model.study('std1').feature('wave').set('plist', 'range(lambda_min,(lambda_max-(lambda_min))/(N_f-1),lambda_max)');
 
-out = model;
+model.study('std1').run;
+R = mphglobal(model, 'abs(emw.S11)^2');
+T = mphglobal(model, 'abs(emw.S21)^2');
+end
