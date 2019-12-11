@@ -89,10 +89,10 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
         with open(output_file, 'r') as f:
             csvreader = reader(f)
             for row in csvreader:
-                data['lamb'].append(row[0])
-                data['R'].append(row[1])
-                data['T'].append(row[2])
-        plt.plot([data['lamb'], data['lamb']], [data['T'], data['R']])
+                data['lamb'].append(float(row[0]))
+                data['R'].append(float(row[1]))
+                data['T'].append(float(row[2]))
+        plt.plot([data['lamb']] * 2, [data['T'], data['R']])
         plt.show()
         
 def compute_fitness():
