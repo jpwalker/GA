@@ -9,10 +9,12 @@ from multiprocessing import Process
 from math import floor
 
 seed(0)
-N = 1000000
+N = 2
 NThread = 2
-Pop = { 'gene' : [], 'fitness' : [], 'perc' : []}
-GeneLen = 20
+Pop = { 'chrom' : [], 'fitness' : [], 'perc' : []}
+GeneLen = 3
+g = 200. # Sidelength of periodic structure in nanometers
+delR = g / (2 * GeneLen)
 template_fn = "template.m" 
 with open(template_fn, 'r') as f:
     template = f.read()
@@ -21,9 +23,58 @@ def thread_func(i):
     fltN = float(N)
     left = i  * floor(fltN / NThread)
     right = min((i + 1) * floor(fltN / NThread), N)
-    print(i, template)
-    #for j in Pop['gene'][left:right]:
-        
+    for l, j in enumerate(Pop['chrom'][left:right]):
+        copper = ''
+        cyl_num = 1
+        dif_num = 2 
+        for k, val in enumerate(j):
+            leftR = k * delR
+            rightR = (k + 1) * delR
+            if (k == 0 and val):
+                copper += '''model.component('comp1').geom('geom1').create('cyl{0}', 'Cylinder');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('r', '{1}[nm]');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('h', 'cu_z');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('pos', {{'0' '0' '-cu_z/2'}});
+model.component('comp1').geom('geom1').feature('cyl{0}').set('contributeto', 'csel3');
+model.component('comp1').geom('geom1').run('cyl{0}');\n'''.format(cyl_num, rightR)
+                cyl_num += 1
+            elif (k == GeneLen - 1 and val):
+                copper += '''model.component('comp1').geom('geom1').create('blk4', 'Block');
+model.component('comp1').geom('geom1').feature('blk4').set('size', {{'g' 'g' 'cu_z'}});
+model.component('comp1').geom('geom1').feature('blk4').set('base', 'center');
+model.component('comp1').geom('geom1').run('blk4');
+model.component('comp1').geom('geom1').create('cyl{0}', 'Cylinder');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('r', '{1}[nm]');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('h', 'cu_z');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('pos', {{'0' '0' '-cu_z/2'}});
+model.component('comp1').geom('geom1').run('cyl{0}');
+model.component('comp1').geom('geom1').create('dif{2}', 'Difference');
+model.component('comp1').geom('geom1').feature('dif{2}').selection('input').set({{'blk4'}});
+model.component('comp1').geom('geom1').feature('dif{2}').selection('input2').set({{'cyl{0}'}});
+model.component('comp1').geom('geom1').feature('dif{2}').set('contributeto', 'csel3');
+model.component('comp1').geom('geom1').run('dif{2}');\n'''.format(cyl_num, leftR, dif_num)
+                cyl_num += 1
+                dif_num += 1 
+            elif (val):
+                copper += '''model.component('comp1').geom('geom1').create('cyl{0}', 'Cylinder');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('r', '{1}[nm]');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('h', 'cu_z');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('pos', {{'0' '0' '-cu_z/2'}});\n'''.format(cyl_num, rightR)
+                cyl_num += 1
+                copper += '''model.component('comp1').geom('geom1').create('cyl{0}', 'Cylinder');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('r', '{1}[nm]');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('h', 'cu_z');
+model.component('comp1').geom('geom1').feature('cyl{0}').set('pos', {{'0' '0' '-cu_z/2'}});\n'''.format(cyl_num, leftR)
+                cyl_num += 1
+                copper += '''model.component('comp1').geom('geom1').create('dif{0}', 'Difference');
+model.component('comp1').geom('geom1').feature('dif{0}').selection('input').set({{'cyl{1}'}});
+model.component('comp1').geom('geom1').feature('dif{0}').selection('input2').set({{'cyl{2}'}});
+model.component('comp1').geom('geom1').feature('dif{0}').set('contributeto', 'csel3');
+model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_num - 2, cyl_num - 1)
+                dif_num += 1
+        print(j)
+        with open('template_{0}.m'.format(i  * floor(fltN / NThread) + l), 'w') as f:
+            f.write(template.format(copper))
 
 def compute_fitness():
     threads = []
@@ -44,7 +95,7 @@ def init_pop():
                 gene.append(True)
             else:
                 gene.append(False)
-        Pop['gene'].append(gene)
+        Pop['chrom'].append(gene)
 
 if __name__ == '__main__':
     init_pop()
