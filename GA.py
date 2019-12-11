@@ -89,6 +89,7 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
         with open(output_file, 'r') as f:
             csvreader = reader(f)
             for row in csvreader:
+                print(row)
                 data['lamb'].append(row[0])
                 data['R'].append(row[1])
                 data['T'].append(row[2])
