@@ -90,12 +90,14 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
             csvreader = reader(f)
             for row in csvreader:
                 print(row)
-                data['lamb'].append(row[0])
-                data['R'].append(row[1])
-                data['T'].append(row[2])
-        print(data['lamb'])
-        plt.plot([data['lamb'], data['lamb']], [data['T'], data['R']])
-        plt.show()
+                print(row[0])
+                print(row[1])
+                #data['lamb'].append(row[0])
+                #data['R'].append(row[1])
+                #data['T'].append(row[2])
+        #print(data['lamb'])
+        #plt.plot([data['lamb'], data['lamb']], [data['T'], data['R']])
+        #plt.show()
         
 def compute_fitness():
     threads = []
