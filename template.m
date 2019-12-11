@@ -208,11 +208,6 @@ model.component('comp1').selection.create('uni3', 'Union');
 model.component('comp1').selection('uni3').set('input', {{'geom1_csel1_dom' 'geom1_csel2_dom'}});
 model.component('comp1').selection('uni3').label('Air');
 
-model.component('comp1').material('mat2').selection.named('geom1_csel1_dom');
-model.component('comp1').material('mat2').selection.named('uni3');
-model.component('comp1').material('mat2').selection.all;
-model.component('comp1').material('mat2').selection.set([1 2 3 4 5]);
-model.component('comp1').material('mat2').selection.named('geom1_csel3_dom');
 model.component('comp1').material('mat2').selection.named('uni3');
 model.component('comp1').material('mat1').selection.named('geom1_csel3_dom');
 
