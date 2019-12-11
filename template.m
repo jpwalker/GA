@@ -86,7 +86,7 @@ model.component('comp1').geom('geom1').create('blk3', 'Block');
 model.component('comp1').geom('geom1').feature('blk3').set('size', {{'g' 'g' 'air_z'}});
 model.component('comp1').geom('geom1').feature('blk3').set('base', 'center');
 model.component('comp1').geom('geom1').feature('blk3').label('Air Block');
-model.component('comp1').geom('geom1').feature('blk3').label('Air Block Tool');;
+model.component('comp1').geom('geom1').feature('blk3').label('Air Block Tool');
 model.component('comp1').geom('geom1').run('blk3');
 model.component('comp1').geom('geom1').selection.create('csel2', 'CumulativeSelection');
 model.component('comp1').geom('geom1').selection('csel2').label('geom_air');
