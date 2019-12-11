@@ -3,11 +3,11 @@ function model
 % template.m
 %
 % Model exported on Dec 7 2019, 23:41 by COMSOL 5.4.0.225.
-
-mphstart
   
-import com.comsol.model.*
-import com.comsol.model.util.*
+  mphstart('{2}', 2036, 'comsol', 'batty');
+
+import com.comsol.model.*;
+import com.comsol.model.util.*;
 
 model = ModelUtil.create('Model');
 
