@@ -21,7 +21,7 @@ delR = g / (2 * GeneLen)
 template_fn = "template.m" 
 with open(template_fn, 'r') as f:
     template = f.read()
-matlab_cmdline_run = 'matlab -nodisplay -nosplash -nodesktop -r "run(\'{0}\');exit;"'
+matlab_cmdline_run = 'export MATLABPATH=/home/comsol/.opt/COMSOL/comsol54/multiphysics/mli; matlab -nodisplay -nosplash -nodesktop -r "run(\'{0}\'); exit;"'
 
 def thread_func(i):
     fltN = float(N)
