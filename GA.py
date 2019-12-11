@@ -84,7 +84,7 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
             server = 'comsol-1'
         with open(matlab_file, 'w') as f:
             f.write(template.format(copper, output_file, server))
-        print(run(matlab_cmdline_run.format(matlab_file), shell=True))
+        run(matlab_cmdline_run.format(matlab_file), shell=True)
         data = {'lamb' : [], 'R' : [], 'T' : []}
         with open(output_file, 'r') as f:
             csvreader = reader(f)
@@ -92,7 +92,8 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
                 data['lamb'].append(float(row[0]))
                 data['R'].append(float(row[1]))
                 data['T'].append(float(row[2]))
-        plt.plot([data['lamb']] * 2, [data['T'], data['R']])
+        plt.plot(data['lamb'], data['T'])
+        plt.plot(data['lamb'], data['R'])
         plt.show()
         
 def compute_fitness():
