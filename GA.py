@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 seed(0)
 N = 2
-NThread = 2
+NThread = 1
 Pop = { 'chrom' : [], 'fitness' : [], 'perc' : []}
 GeneLen = 3
 g = 200. # Sidelength of periodic structure in nanometers
