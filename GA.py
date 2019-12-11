@@ -91,9 +91,9 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
                 data['lamb'].append(float(row[0]))
                 data['R'].append(float(row[1]))
                 data['T'].append(float(row[2]))
-        plt.plot(data['lamb'], data['T'])
-        plt.plot(data['lamb'], data['R'])
-        plt.show()
+        #plt.plot(data['lamb'], data['T'])
+        #plt.plot(data['lamb'], data['R'])
+        #plt.show()
         
 def compute_fitness():
     threads = []
