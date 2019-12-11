@@ -96,7 +96,7 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
             server = 'comsol-1'
         with open(matlab_file, 'w') as f:
             f.write(template.format(copper, output_file, server))
-        run(matlab_cmdline_run.format(matlab_file), shell=True, stdout=None, stderr=None)
+        run(matlab_cmdline_run.format(matlab_file), shell=True, stdout='/dev/null', stderr='/dev/null')
         data = {'lamb' : array([], dtype=float), 'R' : array([], dtype=float), 'T' : array([], dtype=float)}
         with open(output_file, 'r') as f:
             csvreader = reader(f)
