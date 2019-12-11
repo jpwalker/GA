@@ -78,7 +78,7 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
                 dif_num += 1
         matlab_file = 'run_{0}.m'.format(left + l)
         output_file = 'run_{0}.csv'.format(left + l)
-        if i == 2:
+        if i == 1:
             server = 'comsol-2'
         else:
             server = 'comsol-1'
