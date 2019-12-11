@@ -252,5 +252,5 @@ model.study('std1').run;
 lambda0 = mphglobal(model, 'lambda0');
 R = mphglobal(model, 'abs(emw.S11)^2');
 T = mphglobal(model, 'abs(emw.S21)^2');
-writematrix([lambda0, R, T]', '{1}')
+writematrix([lambda0, R, T], '{1}')
 end
