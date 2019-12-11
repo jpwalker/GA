@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 seed(0)
 N = 2
-NThread = 1
+NThread = 2
 Pop = { 'chrom' : [], 'fitness' : [], 'perc' : []}
 GeneLen = 3
 g = 200. # Sidelength of periodic structure in nanometers
@@ -78,8 +78,12 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
                 dif_num += 1
         matlab_file = 'run_{0}.m'.format(left + l)
         output_file = 'run_{0}.csv'.format(left + l)
+        if i == 2:
+            server = 'comsol-2'
+        else:
+            server = 'comsol-1'
         with open(matlab_file, 'w') as f:
-            f.write(template.format(copper, output_file))
+            f.write(template.format(copper, output_file, server))
         print(run(matlab_cmdline_run.format(matlab_file), shell=True))
         data = {'lamb' : [], 'R' : [], 'T' : []}
         with open(output_file, 'r') as f:
@@ -88,9 +92,9 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
                 data['lamb'].append(row[0])
                 data['R'].append(row[1])
                 data['T'].append(row[2])
-        print(type(data['lamb']))
-        #plt.plot([data['lamb'], data['lamb']], [data['T'], data['R']])
-        #plt.show()
+        print(data['lamb'])
+        plt.plot([data['lamb'], data['lamb']], [data['T'], data['R']])
+        plt.show()
         
 def compute_fitness():
     threads = []
