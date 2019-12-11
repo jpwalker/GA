@@ -28,7 +28,7 @@ model.param.set('g', '200[nm]');
 model.param.set('cu_z', '25[nm]');
 model.param.set('air_z', '2[um]');
 model.param.set('PML_z', '1.5[um]');
-model.param.set('N_f', '100');
+model.param.set('N_f', '20');
 model.param.set('lambda_min', '230[nm]');
 model.param.set('lambda_max', '1000[nm]');
 

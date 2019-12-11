@@ -4,24 +4,36 @@ Created on Dec 8, 2019
 
 @author: jpwalker
 '''
-from random import seed, random
+
+#from random import seed
+from random import random
 from multiprocessing import Process
 from math import floor
 from subprocess import run
 from csv import reader
-import matplotlib.pyplot as plt
+from numpy import array, append
+#import matplotlib.pyplot as plt
 
-N = 10
+#seed(0)
+N = 20
 NThread = 2
 Pop = { 'chrom' : [], 'fitness' : [], 'perc' : []}
 GeneLen = 10
 g = 200. # Sidelength of periodic structure in nanometers
 delR = g / (2 * GeneLen)
+#expected_result_fn = 'run_0.csv'
 template_fn = "template.m" 
 with open(template_fn, 'r') as f:
     template = f.read()
 matlab_cmdline_run = 'matlab -nodisplay -nosplash -nodesktop -r "run(\'{0}\'); exit;"'
-
+expected_result = {'lamb' : array([], dtype=float), 'R': array([], dtype=float), 'T' : array([], dtype=float)}
+# with open(expected_result_fn, 'r') as f:
+#     csvreader = reader(f)
+#     for row in csvreader:
+#         expected_result['lamb'] = append(expected_result['lamb'], float(row[0]))
+#         expected_result['R'] = append(expected_result['R'], float(row[1]))
+#         expected_result['T'] = append(expected_result['T'], float(row[2]))
+        
 def thread_func(i):
     fltN = float(N)
     left = i  * floor(fltN / NThread)
@@ -30,6 +42,7 @@ def thread_func(i):
         copper = ''
         cyl_num = 1
         dif_num = 2 
+        print(j)
         for k, val in enumerate(j):
             leftR = k * delR
             rightR = (k + 1) * delR
@@ -84,16 +97,17 @@ model.component('comp1').geom('geom1').run('dif{0}');\n'''.format(dif_num, cyl_n
         with open(matlab_file, 'w') as f:
             f.write(template.format(copper, output_file, server))
         run(matlab_cmdline_run.format(matlab_file), shell=True)
-        data = {'lamb' : [], 'R' : [], 'T' : []}
+        data = {'lamb' : array([], dtype=float), 'R' : array([], dtype=float), 'T' : array([], dtype=float)}
         with open(output_file, 'r') as f:
             csvreader = reader(f)
             for row in csvreader:
-                data['lamb'].append(float(row[0]))
-                data['R'].append(float(row[1]))
-                data['T'].append(float(row[2]))
+                data['lamb'] = append(data['lamb'], float(row[0]))
+                data['R'] = append(data['R'], float(row[1]))
+                data['T'] = append(data['T'], float(row[2]))
         #plt.plot(data['lamb'], data['T'])
         #plt.plot(data['lamb'], data['R'])
         #plt.show()
+        #chi_ish2 = (data['R'] - expected_result['R']) ** 2. + (data['T'] - expected_result['T']) ** 2.
         
 def compute_fitness():
     threads = []
